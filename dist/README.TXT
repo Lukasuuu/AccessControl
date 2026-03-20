@@ -119,17 +119,17 @@ DadosInvalidosException, garantindo respostas organizadas em cada cenário.
   Script de criação da tabela:
 
     CREATE TABLE utilizador (
-        id        INT PRIMARY KEY AUTO_INCREMENT,
-        username  VARCHAR(50)  NOT NULL,
-        password  VARCHAR(50)  NOT NULL,
-        is_admin  BOOLEAN      DEFAULT FALSE
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) NOT NULL,
+        password VARCHAR(100) NOT NULL,
+        is_admin BOOLEAN NOT NULL
     );
 
   Dados de teste:
 
     INSERT INTO utilizador (username, password, is_admin)
-    VALUES ('admin', 'admin123', TRUE),
-           ('utilizador', 'pass123', FALSE);
+    VALUES ('admin', '123', 1),
+	   ('lucas', 'lucas', 0);
 
 --------------------------------------------------------------------------------
   FLUXO DE AUTENTICAÇÃO

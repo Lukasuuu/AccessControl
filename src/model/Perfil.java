@@ -4,7 +4,7 @@ import exception.DadosInvalidosException;
 
 /**
  * Representa o tipo de acesso de um utilizador no sistema AccessControl.
- * <p>
+ * 
  * Cada perfil define um nível de permissão, como Administrador ou Utilizador,
  * sendo utilizado para controlar o acesso às funcionalidades da aplicação.
  *
@@ -26,13 +26,12 @@ public class Perfil {
     /**
      * Construtor completo. Cria um perfil com todos os dados validados.
      *
-     * @param id         Identificador único do perfil. Deve ser maior que zero.
+     * @param id Identificador único do perfil.
      * @param nomePerfil Nome descritivo do perfil (ex: "Administrador", "Utilizador").
-     * @throws DadosInvalidosException se o ID for inválido ou o nome for nulo/vazio.
      */
-    public Perfil(int id, String nomePerfil) throws DadosInvalidosException {
-        setId(id);
-        setNomePerfil(nomePerfil);
+    public Perfil(int id, String nomePerfil) {
+        this.id = id;
+        this.nomePerfil = nomePerfil;
     }
 
     /**

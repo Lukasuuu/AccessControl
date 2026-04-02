@@ -10,13 +10,14 @@ import exception.DadosInvalidosException;
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17
- * @version 1.0
+ * @version 1.1
  */
 public class Utilizador extends Pessoa {
 
     private String username;
     private String password;
     private boolean isAdmin;
+    private Perfil perfil;
 
     /**
      * Construtor vazio. Cria um utilizador sem dados definidos.
@@ -27,38 +28,43 @@ public class Utilizador extends Pessoa {
     /**
      * Construtor completo. Cria um utilizador com todos os dados validados.
      *
-     * @param id       Identificador único do utilizador. Deve ser maior que zero.
-     * @param nome     Nome completo do utilizador. Não pode ser nulo nem vazio.
-     * @param username Nome de login. Não pode ser nulo nem vazio.
-     * @param password Senha de acesso. Deve ter no mínimo 3 caracteres.
-     * @param isAdmin  {@code true} se o utilizador for administrador, {@code false} caso contrário.
-     * @throws DadosInvalidosException se algum dos dados fornecidos for inválido.
+     * @param id Identificador único do utilizador.
+     * @param nome Nome completo do utilizador.
+     * @param username Nome de login.
+     * @param password Senha de acesso.
+     * @param isAdmin Indica se o utilizador é administrador.
+     * @param perfil Perfil associado ao utilizador.
+     * @throws DadosInvalidosException Se algum dado for inválido.
      */
-    public Utilizador(int id, String nome, String username, String password, boolean isAdmin)
-            throws DadosInvalidosException {
+    public Utilizador(int id, String nome, String username, String password,
+            boolean isAdmin, Perfil perfil) throws DadosInvalidosException {
+        
         super(id, nome);
         setUsername(username);
         setPassword(password);
+        setPerfil(perfil);
+        
         this.isAdmin = isAdmin;
     }
 
     /**
      * Construtor simplificado para autenticação.
-     * <p>
-     * Utilizado quando o nome completo não é necessário,
-     * por exemplo, ao carregar dados de login da base de dados.
      *
-     * @param id       Identificador único do utilizador. Deve ser maior que zero.
-     * @param username Nome de login. Não pode ser nulo nem vazio.
-     * @param password Senha de acesso. Deve ter no mínimo 3 caracteres.
-     * @param isAdmin  {@code true} se o utilizador for administrador, {@code false} caso contrário.
-     * @throws DadosInvalidosException se algum dos dados fornecidos for inválido.
+     * @param id Identificador único do utilizador.
+     * @param username Nome de login.
+     * @param password Senha de acesso.
+     * @param isAdmin Indica se o utilizador é administrador.
+     * @param perfil Perfil associado ao utilizador.
+     * @throws DadosInvalidosException Se algum dado for inválido.
      */
-    public Utilizador(int id, String username, String password, boolean isAdmin)
-            throws DadosInvalidosException {
+    public Utilizador(int id, String username, String password,
+            boolean isAdmin, Perfil perfil) throws DadosInvalidosException {
+        
         super(id, username);
         setUsername(username);
         setPassword(password);
+        setPerfil(perfil);
+        
         this.isAdmin = isAdmin;
     }
 
@@ -73,11 +79,9 @@ public class Utilizador extends Pessoa {
 
     /**
      * Define o nome de login do utilizador.
-     * <p>
-     * Método privado — o username só pode ser atribuído pelo construtor.
      *
-     * @param username Nome de login. Não pode ser nulo nem vazio.
-     * @throws DadosInvalidosException se o username for nulo ou em branco.
+     * @param username Nome de login.
+     * @throws DadosInvalidosException Se o username for nulo ou vazio.
      */
     private void setUsername(String username) throws DadosInvalidosException {
         if (username == null || username.isBlank()) {
@@ -87,7 +91,7 @@ public class Utilizador extends Pessoa {
     }
 
     /**
-     * Retorna a senha de acesso do utilizador.
+     * Retorna a password do utilizador.
      *
      * @return Password do utilizador.
      */
@@ -96,12 +100,10 @@ public class Utilizador extends Pessoa {
     }
 
     /**
-     * Define a senha de acesso do utilizador.
-     * <p>
-     * Método privado — a password só pode ser atribuída pelo construtor.
+     * Define a password do utilizador.
      *
-     * @param password Senha de acesso. Deve ter no mínimo 3 caracteres.
-     * @throws DadosInvalidosException se a password for nula ou tiver menos de 3 caracteres.
+     * @param password Senha de acesso.
+     * @throws DadosInvalidosException Se a password for nula ou tiver menos de 3 caracteres.
      */
     private void setPassword(String password) throws DadosInvalidosException {
         if (password == null || password.length() < 3) {
@@ -111,7 +113,7 @@ public class Utilizador extends Pessoa {
     }
 
     /**
-     * Indica se o utilizador tem permissões de administrador.
+     * Verifica se o utilizador é administrador.
      *
      * @return {@code true} se for administrador, {@code false} caso contrário.
      */
@@ -120,12 +122,49 @@ public class Utilizador extends Pessoa {
     }
 
     /**
-     * Define o nível de permissão do utilizador.
+     * Define se o utilizador é administrador.
      *
-     * @param isAdmin {@code true} para conceder permissões de administrador,
-     *                {@code false} para revogar.
+     * @param isAdmin {@code true} para administrador, {@code false} caso contrário.
      */
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    /**
+     * Retorna o perfil do utilizador.
+     *
+     * @return Perfil associado ao utilizador.
+     */
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    /**
+     * Define o perfil do utilizador.
+     *
+     * @param perfil Perfil associado ao utilizador.
+     * @throws DadosInvalidosException Se o perfil for nulo.
+     */
+    public void setPerfil(Perfil perfil) throws DadosInvalidosException {
+        if (perfil == null) {
+            throw new DadosInvalidosException("Perfil inválido.");
+        }
+        this.perfil = perfil;
+    }
+
+    /**
+     * Retorna uma representação textual do utilizador.
+     *
+     * @return Texto com os dados principais do utilizador.
+     */
+    @Override
+    public String toString() {
+        return "Utilizador{"
+                + "id=" + getId()
+                + ", nome='" + getNome() + '\''
+                + ", username='" + username + '\''
+                + ", isAdmin=" + isAdmin
+                + ", perfil=" + (perfil != null ? perfil.getNomePerfil() : "sem perfil")
+                + '}';
     }
 }

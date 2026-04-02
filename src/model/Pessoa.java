@@ -5,8 +5,8 @@ import exception.DadosInvalidosException;
 /**
  * Representa uma pessoa no sistema AccessControl.
  * <p>
- * Classe base que encapsula os dados essenciais de uma pessoa,
- * servindo de base para outras entidades como {@link Utilizador}.
+ * Classe base que encapsula os dados essenciais de uma pessoa, servindo de base
+ * para outras entidades como {@link Utilizador}.
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17
@@ -26,9 +26,10 @@ public class Pessoa {
     /**
      * Construtor completo. Cria uma pessoa com todos os dados validados.
      *
-     * @param id   Identificador único da pessoa. Deve ser maior que zero.
+     * @param id Identificador único da pessoa. Deve ser maior que zero.
      * @param nome Nome da pessoa. Não pode ser nulo nem vazio.
-     * @throws DadosInvalidosException se o ID for inválido ou o nome for nulo/vazio.
+     * @throws DadosInvalidosException se o ID for inválido ou o nome for
+     * nulo/vazio.
      */
     public Pessoa(int id, String nome) throws DadosInvalidosException {
         setId(id);
@@ -52,7 +53,7 @@ public class Pessoa {
      * @param id ID da pessoa. Deve ser maior que zero.
      * @throws DadosInvalidosException se o ID for menor ou igual a zero.
      */
-    private void setId(int id) throws DadosInvalidosException {
+    public void setId(int id) throws DadosInvalidosException {
         if (id <= 0) {
             throw new DadosInvalidosException("ID inválido.");
         }
@@ -69,6 +70,19 @@ public class Pessoa {
     }
 
     /**
+     * Construtor simplificado. Cria uma pessoa apenas com o nome.
+     *
+     * Utilizado quando o identificador ainda não está definido, por exemplo,
+     * antes de persistir a pessoa na base de dados.
+     *
+     * @param nome Nome da pessoa. Não pode ser nulo nem vazio.
+     * @throws DadosInvalidosException se o nome for nulo ou em branco.
+     */
+    public Pessoa(String nome) throws DadosInvalidosException {
+        setNome(nome);
+    }
+
+    /**
      * Define o nome da pessoa.
      *
      * @param nome Nome da pessoa. Não pode ser nulo nem vazio.
@@ -80,4 +94,14 @@ public class Pessoa {
         }
         this.nome = nome;
     }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return nome;
+    }
+
 }

@@ -234,7 +234,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        new Home().setVisible(true);
+        fazerLogout();
         dispose();
     }//GEN-LAST:event_btnSairActionPerformed
 

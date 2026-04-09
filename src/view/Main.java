@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
 
 import exception.DadosInvalidosException;
@@ -10,37 +6,89 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import model.Utilizador;
 
 /**
- *
- * @author Lucas
+ * Janela principal da aplicação AccessControl. 
+ * Esta classe representa a janela principal que aparece depois do login.
+ * Mostra o nome do utilizador e o seu perfil na barra de menus. 
+ * 
+ * Regras de visibilidade do menu:
+ *   Administrador → vê "Registar" dentro de Files
+ *   Utilizador normal → "Registar" fica oculto (Files aparece vazio)
+ *   Todos → Manual visível
+ *   Logout → volta ao Home e limpa a sessão
+ * 
+ * @author Lucas Gonçalves
+ * @since 2026-03-17
  */
 public class Main extends javax.swing.JFrame {
 
+    private Utilizador utilizadorLogado;
+
     /**
-     * Creates new form Main
+     * Construtor padrão. 
+     * Cria a janela principal sem nenhum utilizador logado.
+     * Inicializa os componentes da interface
      */
     public Main() {
         initComponents();
-        setTitle("AccessControl - Main");
+        setTitle("AccessControl - Main" );
+        configurarLogout(); // adicionar comportamento ao menu Logout
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
+    /**
+     * Construtor com utilizador. 
+     * Cria a janela principal e define o utilizador que já está autenticado. 
+     * O utilizador passado será mostrado na barra de menus.
+     *
+     * @param u Utilizador autenticado (pode ser null).
+     */
+    public Main(Utilizador u) {
+        initComponents();
+        configurarLogout();
+        setUtilizadorLogado(u);
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lbImage = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jmFiles = new javax.swing.JMenu();
+        JmiRegistar = new javax.swing.JMenuItem();
         jmManual = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        lbImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/AccessControl.png"))); // NOI18N
 
         jmFiles.setText("Files");
+        jmFiles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        JmiRegistar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JmiRegistar.setText("Registar");
+        JmiRegistar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JmiRegistarActionPerformed(evt);
+            }
+        });
+        jmFiles.add(JmiRegistar);
+
         jMenuBar.add(jmFiles);
 
         jmManual.setText("Manual");
+        jmManual.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jmManual.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jmManualMouseClicked(evt);
@@ -48,26 +96,106 @@ public class Main extends javax.swing.JFrame {
         });
         jMenuBar.add(jmManual);
 
+        jMenu1.setText("Logout");
+        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jMenuBar.add(jMenu1);
+
         setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lbImage)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lbImage)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    // =========================================================
+    // LOGOUT
+    // =========================================================
+
+    /**
+     * Adiciona o comportamento de clique ao menu "Logout".
+     * Como o NetBeans criou como JMenu (não JMenuItem), usamos
+     * um MouseListener para capturar o clique nele.
+     */
+    private void configurarLogout() {
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fazerLogout();
+            }
+        });
+    }
+    
+    /**
+     * Executa o logout: confirma com o utilizador, volta ao Home 
+     * Fecha a janela Main atual, limpando a sessão.
+     */
+    private void fazerLogout() {
+        int resposta = JOptionPane.showConfirmDialog(
+            this,
+            "Tens a certeza que queres sair?",
+            "Confirmar Logout",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (resposta == JOptionPane.YES_OPTION) {
+            utilizadorLogado = null;          // limpa a sessão em memória
+            new Home().setVisible(true);   // volta à janela inicial
+            dispose();                      // fecha o Main
+        }
+    }
+    
+    // =========================================================
+    // MENU FILES — visibilidade baseada no perfil
+    // =========================================================
+
+    /**
+     * Controla a visibilidade dos itens do menu Files.
+     * Admin vê "Registar"; utilizador normal não vê nada.
+     *
+     * Fazemos isto com setVisible() no JmiRegistar em vez de
+     * removeAll(), para não perder a ligação criada pelo NetBeans.
+     */
+    private void configurarMenus() {
+        boolean isAdmin = utilizadorLogado != null && utilizadorLogado.isAdmin();
+
+        // O item "Registar" só aparece para o Administrador
+        JmiRegistar.setVisible(isAdmin);
+        jmFiles.setVisible(isAdmin);
+    }
+    
+    /**
+     * Mostra o manual da aplicação. 
+     * Lê o ficheiro README e apresenta o seu conteúdo num diálogo. 
+     * Em caso de erro, mostra uma mensagem ao utilizador.
+     *
+     * @param evt Evento de clique que disparou a ação.
+     */
 
     private void jmManualMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmManualMouseClicked
-        File manual = new File("README.txt");
+        File manual;
+        //escolhe o manual baseado no tipo de utilizador
+        if (utilizadorLogado != null && utilizadorLogado.isAdmin()) {
+            manual = new File("README_ADMIN.txt");
+        } else {
+            manual = new File("README_USER.txt");
+        }
+
         if (!manual.exists()) {
-            manual = new File("dist/README.txt");
+            manual = new File("dist/" + manual.getName());
         }
 
         try {
@@ -90,42 +218,77 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmManualMouseClicked
 
+    // =========================================================
+    // REGISTAR — abre o diálogo de registo de utilizador
+    // =========================================================
+
     /**
-     * @param args the command line arguments
+     * Chamado quando o Administrador clica em Files > Registar.
+     * Abre o diálogo RegistarUtilizadorDialog.
+     */
+    private void JmiRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmiRegistarActionPerformed
+        // Abre o diálogo modal de registo
+        // 'this' é o Frame pai, true = modal (bloqueia o Main enquanto aberto)
+        RegistarUtilizadorDialog dlg = new RegistarUtilizadorDialog(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_JmiRegistarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+         fazerLogout();
+    }//GEN-LAST:event_formWindowClosing
+    
+    // =========================================================
+    // LABEL DO UTILIZADOR LOGADO
+    // =========================================================
+    /**
+     * Atualiza o texto do label que mostra o utilizador logado. 
+     * Apenas altera o texto do label e o título da janela para refletir o utilizador atual. 
+     * Não modifica a estrutura da barra de menus.
+     */
+    private void mostrarTipoUtilizador() {
+        if (utilizadorLogado != null) {
+            String perfilNome = (utilizadorLogado.getPerfil() != null)
+                    ? utilizadorLogado.getPerfil().getNomePerfil()
+                    : "sem perfil";
+            String tipo = utilizadorLogado.isAdmin() ? "Administrador" : "Utilizador";
+            setTitle("AccessControl - " + utilizadorLogado.getUsername());
+        } else {
+            setTitle("AccessControl - Main");
+        }
+        pack();
+    }
+
+    /**
+     * Define o utilizador atualmente autenticado e atualiza a interface. pode
+     * ser null para limpar a sessão.
+     *
+     * @param u Utilizador autenticado;
+     *
+     */
+    public void setUtilizadorLogado(Utilizador u) {
+        this.utilizadorLogado = u;
+        mostrarTipoUtilizador();
+        configurarMenus();
+    }
+    /**
+     * Ponto de entrada para executar a janela Main diretamente. 
+     * Cria e mostra a janela principal na Event Dispatch Thread do Swing.
+     *
+     * @param args Argumentos da linha de comando (não utilizados).
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Main().setVisible(true);
+            Main JanelaMain = new Main();
+            JanelaMain.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem JmiRegistar;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenu jmFiles;
     private javax.swing.JMenu jmManual;
+    private javax.swing.JLabel lbImage;
     // End of variables declaration//GEN-END:variables
 }

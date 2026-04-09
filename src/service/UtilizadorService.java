@@ -1,6 +1,7 @@
 package service;
 
 import exception.DadosInvalidosException;
+import java.util.List;
 import model.Utilizador;
 import persistence.UtilizadorDAO;
 
@@ -28,13 +29,16 @@ public class UtilizadorService {
         this.utilizadorDAO = new UtilizadorDAO();
     }
 
+    // =========================================================
+    // AUTENTICAÇÃO
+    // =========================================================
     /**
      * Autentica um utilizador no sistema.
      *
      * Regras:
-     * - Se username estiver vazio, lança exceção.
-     * - Se password estiver vazia, lança exceção.
-     * - Se as credenciais estiverem erradas, retorna null.
+     * Se username estiver vazio, lança exceção.
+     * Se password estiver vazia, lança exceção.
+     * Se as credenciais estiverem erradas, retorna null.
      *
      * @param username Nome de utilizador (login).
      * @param password Senha do utilizador.
@@ -52,5 +56,54 @@ public class UtilizadorService {
         }
 
         return utilizadorDAO.fazerLogin(username.trim(), password.trim());
+    }
+    // =========================================================
+    // REGISTAR UTILIZADOR
+    // =========================================================
+
+    /**
+     * Valida e regista um novo utilizador.
+     *
+     * @param nome     Nome completo (obrigatório).
+     * @param username Username único (obrigatório).
+     * @param password Password com mínimo 3 caracteres.
+     * @param isAdmin  true para Administrador.
+     * @param perfilId ID do perfil (1=Admin, 2=Utilizador).
+     */
+    public void registarUtilizador(String nome, String username, String password,
+                                    boolean isAdmin, int perfilId)
+            throws DadosInvalidosException {
+
+        if (nome == null || nome.isBlank())
+            throw new DadosInvalidosException("O nome é obrigatório.");
+        if (username == null || username.isBlank())
+            throw new DadosInvalidosException("O username é obrigatório.");
+        if (password == null || password.length() < 3)
+            throw new DadosInvalidosException("A password deve ter pelo menos 3 caracteres.");
+        if (perfilId <= 0)
+            throw new DadosInvalidosException("Selecione um perfil válido.");
+
+        utilizadorDAO.registarUtilizador(
+            nome.trim(), username.trim(), password, isAdmin, perfilId
+        );
+    }
+
+    // =========================================================
+    // LISTAR UTILIZADORES
+    // =========================================================
+    public List<Utilizador> listarUtilizadores() throws DadosInvalidosException {
+        return utilizadorDAO.listarUtilizadores();
+    }
+
+    // =========================================================
+    // ATRIBUIR PERMISSÃO
+    // =========================================================
+    public void atualizarPermissao(int utilizadorId, int perfilId, boolean isAdmin)
+            throws DadosInvalidosException {
+        if (utilizadorId <= 0)
+            throw new DadosInvalidosException("Utilizador inválido.");
+        if (perfilId <= 0)
+            throw new DadosInvalidosException("Perfil inválido.");
+        utilizadorDAO.atualizarPermissao(utilizadorId, perfilId, isAdmin);
     }
 }

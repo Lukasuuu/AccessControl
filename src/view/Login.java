@@ -2,6 +2,7 @@ package view;
 
 import exception.DadosInvalidosException;
 import javax.swing.JOptionPane;
+import model.Perfil;
 import model.Utilizador;
 import service.UtilizadorService;
 
@@ -19,16 +20,19 @@ public class Login extends javax.swing.JFrame {
 
     private final UtilizadorService utilizadorService = new UtilizadorService();
 
+    // String de Perfil
+    private String perfilSelecionado;
+
     /**
      * Construtor padrão da janela de login.
+     * @param perfilSelecionado
      */
-    public Login() {
+    public Login(String perfilSelecionado) {
+        this.perfilSelecionado = perfilSelecionado; // guardar o perfil recebido
         initComponents();
-        // Permite pressionar Enter para fazer login
         getRootPane().setDefaultButton(btnGuardar);
         setLocationRelativeTo(null);
-        setTitle("AccessControl - Login");
-
+        setTitle("AccessControl - Login (" + perfilSelecionado + ")"); // mostra o perfil no título
     }
 
 
@@ -49,6 +53,11 @@ public class Login extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         lbPassword.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         lbPassword.setText("Senha:");
@@ -152,16 +161,21 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     /**
      * Faz o login no sistema. - Lê os campos da tela - Chama o UtilizadorDAO
+     * atraves da Classe utilizadorService
+     *
      * para validar no banco - Se der certo, abre a tela principal - Se der
      * errado, mostra mensagem e não abre o sistema
      */
     private void fazerLogin() {
+        // Ler os campos
         String username = txtUtilizador.getText().trim();
         String password = new String(txtPassword.getPassword()).trim();
 
         try {
+            // Autenticar utilizador
             Utilizador u = utilizadorService.autenticar(username, password);
 
+            // Verificar se login falhou
             if (u == null) {
                 JOptionPane.showMessageDialog(this,
                         "Utilizador ou senha inválidos. Tente novamente.",
@@ -170,24 +184,48 @@ public class Login extends javax.swing.JFrame {
                 return;
             }
 
-            JOptionPane.showMessageDialog(this,
-                    "Bem-vindo, " + u.getUsername() + "!",
-                    "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
+            // Obter perfil
+            Perfil perfil = u.getPerfil();
+            String nomePerfil = perfil.getNomePerfil();
+
+            // Verificar perfil selecionado
+            if (!nomePerfil.equalsIgnoreCase(perfilSelecionado)) {
+                JOptionPane.showMessageDialog(this,
+                        "Esta conta é do tipo \"" + nomePerfil + "\".\n"
+                        + "Volta ao início e seleciona o perfil correto.",
+                        "Perfil incorreto",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Mensagem conforme perfil
+            if (nomePerfil.equalsIgnoreCase("Administrador")) {
+                JOptionPane.showMessageDialog(this,
+                        "Bem-vindo Administrador " + u.getUsername(),
+                        "Acesso Total",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Bem-vindo " + u.getUsername(),
+                        "Acesso Limitado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            // Abrir sistema (Main) e passar o utilizador autenticado
+            Main janelaMain = new Main(); 
+            janelaMain.setUtilizadorLogado(u); // u é o Utilizador retornado pelo service/DAO
+            janelaMain.setVisible(true);
+            dispose(); // fecha o login
 
         } catch (DadosInvalidosException ex) {
+            // Erros de validação
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
                     "Erro de validação",
                     JOptionPane.WARNING_MESSAGE);
         }
-        
-        // Abrir a janela principal e direcionar para o login
-        Main janelaMain = new Main();
-        janelaMain.setVisible(true);
-        dispose();
     }
-
+    
     /**
      * Ação do botão Entrar (antes chamado btnGuardar)
      */
@@ -196,22 +234,44 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        new Home().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnSairActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        fazerLogout();
+    }//GEN-LAST:event_formWindowClosing
     /**
-     * Ponto de entrada alternativo para iniciar a aplicação diretamente pelo
-     * ecrã de login.
-     * <p>
+     * Executa o logout: confirma com o utilizador 
+     * Fecha a janela Login atual, limpando a sessão.
+     */
+    private void fazerLogout() {
+        int resposta = JOptionPane.showConfirmDialog(
+                this,
+                "Tens a certeza que queres sair?",
+                "Confirmar Logout",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (resposta == JOptionPane.YES_OPTION) {
+            new Home().setVisible(true); // volta ao início
+            dispose(); // fecha a janela atual
+        }
+    }
+    /**
+     * Ponto de entrada para iniciar a aplicação pelo ecrã de login.
+     *
      * Inicializa a janela {@link Login} na Event Dispatch Thread do Swing,
      * garantindo a segurança de threads na interface gráfica.
      *
      * @param args Argumentos da linha de comando (não utilizados).
      */
     public static void main(String args[]) {
-        /* Create and display the form */
+        // O Login nunca abre sozinho — primeiro vai ao Home,
+        // onde o utilizador escolhe o perfil e só depois chega aqui.
         java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
+            new Home().setVisible(true);
         });
     }
 

@@ -6,29 +6,25 @@ import java.sql.SQLException;
 import exception.DadosInvalidosException;
 
 /**
- * Classe responsável por estabelecer ligação com a base de dados MySQL. Fornece
- * métodos utilitários para obter e testar conexões.
+ * Classe responsável por estabelecer ligação com a base de dados MySQL. 
+ * Fornece métodos utilitários para obter e testar conexões.
  *
- * <p>
  * Como funciona:
- * <ul>
- * <li>Armazena os dados do servidor, base de dados, utilizador e senha.</li>
- * <li>O método {@link #getConexao()} retorna uma {@link Connection} ativa.</li>
- * </ul>
+ *  Armazena os dados do servidor, base de dados, utilizador e senha.
+ *  O método {@link #getConexao()} retorna uma {@link Connection} ativa.
  *
- * <p>
  * Configuração:
- * <ul>
- * <li>Host: 62.28.39.135</li>
- * <li>Porta: 3306</li>
- * <li>Base de dados: efa0125_08_projeto_java</li>
- * <li>Utilizador: efa0125_08</li>
- * </ul>
+ *  Host: 62.28.39.135
+ *  Porta: 3306
+ *  Base de dados: efa0125_08_projeto_java
+ *  Utilizador: efa0125_08
+ *
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17
  * @version 1.0
  */
+
 public class Conexao {
 
     // ===== DADOS DA BASE DE DADOS =====
@@ -43,8 +39,9 @@ public class Conexao {
     private static final String URL = "jdbc:mysql://" + SERVIDOR + ":3306/" + BASE_DADOS;
 
     /**
-     * Construtor privado — impede a instanciação desta classe utilitária. Todos
-     * os métodos são estáticos e devem ser acedidos diretamente pela classe.
+     * Construtor privado — impede a instanciação desta classe utilitária. 
+     * 
+     * Todos os métodos são estáticos e devem ser acedidos diretamente pela classe.
      */
     private Conexao() {
         throw new UnsupportedOperationException("Classe utilitária — não pode ser instanciada.");
@@ -68,9 +65,10 @@ public class Conexao {
     }
 
     /**
-     * Método utilitário para testar a conexão com a base de dados. Exibe
-     * mensagens no console com o resultado do teste. Todos os erros são
-     * tratados internamente — nunca propaga exceções.
+     * Método utilitário para testar a conexão com a base de dados. 
+     * 
+     * Exibe mensagens no console com o resultado do teste. 
+     * Todos os erros são tratados internamente — nunca propaga exceções.
      */
     public static void testarConexao() {
         System.out.println("========================================");

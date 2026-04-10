@@ -70,9 +70,7 @@ public class UtilizadorService {
      * @param isAdmin  true para Administrador.
      * @param perfilId ID do perfil (1=Admin, 2=Utilizador).
      */
-    public void registarUtilizador(String nome, String username, String password,
-                                    boolean isAdmin, int perfilId)
-            throws DadosInvalidosException {
+    public void registarUtilizador(String nome, String username, String password,boolean isAdmin, int perfilId)throws DadosInvalidosException {
 
         if (nome == null || nome.isBlank())
             throw new DadosInvalidosException("O nome é obrigatório.");

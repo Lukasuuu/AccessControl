@@ -99,9 +99,7 @@ public class UtilizadorDAO {
      * @param perfilId ID do perfil (1=Admin, 2=Utilizador).
      * @throws DadosInvalidosException se ocorrer erro na BD.
      */
-    public void registarUtilizador(String nome, String username, String password,
-                                    boolean isAdmin, int perfilId)
-            throws DadosInvalidosException {
+    public void registarUtilizador(String nome, String username, String password,boolean isAdmin, int perfilId)throws DadosInvalidosException {
 
         // Verificar se username já existe
         if (usernameExiste(username)) {

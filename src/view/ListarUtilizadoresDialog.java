@@ -12,8 +12,8 @@ import service.UtilizadorService;
  * Apenas acessível ao Administrador via Files > Listar Utilizadores.
  *
  * Responsabilidades:
- *   - Listar todos os utilizadores registados numa JTable.
- *   - Permitir ao Administrador alterar o perfil de qualquer utilizador.
+ *   Listar todos os utilizadores registados numa JTable.
+ *   Permitir ao Administrador alterar o perfil de qualquer utilizador.
  *
  * Fluxo (arquitetura 3 camadas):
  *   View (este diálogo) → UtilizadorService → UtilizadorDAO → MySQL
@@ -42,8 +42,6 @@ public class ListarUtilizadoresDialog extends JDialog {
      */
     private List<Utilizador> listaUtilizadores;
  
-    /** ComboBox para escolher o novo perfil ao atualizar permissão. */
-    private JComboBox<String> cmbNovoPerfil;
  
     // =========================================================
     // CONSTRUTOR
@@ -76,8 +74,10 @@ public class ListarUtilizadoresDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanelTabela = new javax.swing.JScrollPane();
         tabelaUtilizadores = new javax.swing.JTable();
+        cmbNovoPerfil = new javax.swing.JComboBox<>();
+        btnAtualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,25 +89,53 @@ public class ListarUtilizadoresDialog extends JDialog {
                 "ID", "Username", "Tipo de Permissão"
             }
         ));
-        jScrollPane1.setViewportView(tabelaUtilizadores);
+        jPanelTabela.setViewportView(tabelaUtilizadores);
+
+        cmbNovoPerfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cmbNovoPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Utilizador" }));
+
+        btnAtualizar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAtualizar.setText("Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelTabela, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(cmbNovoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(157, 157, 157)
+                .addComponent(btnAtualizar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(jPanelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cmbNovoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(btnAtualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        atualizarPermissao();
+    }//GEN-LAST:event_btnAtualizarActionPerformed
 // =========================================================
     // CARREGAR UTILIZADORES (View chama Service)
     // =========================================================
@@ -127,8 +155,7 @@ public class ListarUtilizadoresDialog extends JDialog {
                 modeloTabela.addRow(new Object[]{
                     u.getId(),
                     u.getUsername(),
-                    u.getPerfil().getNomePerfil(),
-                    u.isAdmin() ? "Sim" : "Não"
+                    u.getPerfil().getNomePerfil()
                 });
             }
 
@@ -141,7 +168,7 @@ public class ListarUtilizadoresDialog extends JDialog {
     }
 
     // =========================================================
-    // ATUALIZAR PERMISSÃO (ação sobre linha selecionada)
+    // ATUALIZAR PERMISSÃO (ação sobre linha selecionada para Atualizar as permissões)
     // =========================================================
 
     /**
@@ -151,8 +178,9 @@ public class ListarUtilizadoresDialog extends JDialog {
      *   1. Verifica se uma linha está selecionada.
      *   2. Obtém o Utilizador correspondente da lista em memória.
      *   3. Confirma a alteração com o Administrador.
-     *   4. Chama o Service → DAO → MySQL.
+     *   4. Chama o Service → chama a DAO → chama a query no MySQL.
      *   5. Refresca a tabela com os dados atualizados.
+     *   6. Mostra a tabela ja Atualizada
      */
     private void atualizarPermissao() {
         int linhaSelecionada = tabelaUtilizadores.getSelectedRow();
@@ -197,7 +225,7 @@ public class ListarUtilizadoresDialog extends JDialog {
                     "Sucesso",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            carregarUtilizadores(); // refrescar tabela após alteração
+            carregarUtilizadores(); // carerega novamente a tabela após alteração
 
         } catch (DadosInvalidosException e) {
             JOptionPane.showMessageDialog(this,
@@ -208,7 +236,9 @@ public class ListarUtilizadoresDialog extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton btnAtualizar;
+    private javax.swing.JComboBox<String> cmbNovoPerfil;
+    private javax.swing.JScrollPane jPanelTabela;
     private javax.swing.JTable tabelaUtilizadores;
     // End of variables declaration//GEN-END:variables
 }

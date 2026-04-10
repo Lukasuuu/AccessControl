@@ -3,7 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/model/Utilizador.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/persistence/Conexao.java</file>
             <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/view/Login.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/model/Perfil.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/persistence/UtilizadorDAO.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/service/UtilizadorService.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/view/RegistarUtilizadorDialog.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/exception/DadosInvalidosException.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/view/ListarUtilizadoresDialog.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/model/Pessoa.java</file>
+            <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/view/Home.java</file>
             <file>file:/C:/Users/luc__/Documents/NetBeansProjects/AccessControl/src/view/Main.java</file>
         </group>
     </open-files>

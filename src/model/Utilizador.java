@@ -4,13 +4,13 @@ import exception.DadosInvalidosException;
 
 /**
  * Representa um utilizador autenticável no sistema AccessControl.
- * <p>
+ * 
  * Estende {@link Pessoa} com credenciais de acesso e nível de permissão,
  * suportando autenticação básica por username e password.
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17
- * @version 1.1
+ * @version 1.0
  */
 public class Utilizador extends Pessoa {
 
@@ -20,13 +20,15 @@ public class Utilizador extends Pessoa {
     private Perfil perfil;
 
     /**
-     * Construtor vazio. Cria um utilizador sem dados definidos.
+     * Construtor vazio. 
+     * Cria um utilizador sem dados definidos.
      */
     public Utilizador() {
     }
 
     /**
-     * Construtor completo. Cria um utilizador com todos os dados validados.
+     * Construtor completo. 
+     * Cria um utilizador com todos os dados validados.
      *
      * @param id Identificador único do utilizador.
      * @param nome Nome completo do utilizador.
@@ -81,7 +83,8 @@ public class Utilizador extends Pessoa {
      * Define o nome de login do utilizador.
      *
      * @param username Nome de login.
-     * @throws DadosInvalidosException Se o username for nulo ou vazio.
+     * @throws DadosInvalidosException 
+     * Se o username for nulo ou vazio.
      */
     private void setUsername(String username) throws DadosInvalidosException {
         if (username == null || username.isBlank()) {
@@ -103,7 +106,8 @@ public class Utilizador extends Pessoa {
      * Define a password do utilizador.
      *
      * @param password Senha de acesso.
-     * @throws DadosInvalidosException Se a password for nula ou tiver menos de 3 caracteres.
+     * @throws DadosInvalidosException 
+     * Se a password for nula ou tiver menos de 3 caracteres.
      */
     private void setPassword(String password) throws DadosInvalidosException {
         if (password == null || password.length() < 3) {

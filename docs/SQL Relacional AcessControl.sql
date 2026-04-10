@@ -8,9 +8,9 @@
 --  pessoa (1) ────── (1) utilizador ────── (N) perfil
 --
 -- ====================================================
-
 CREATE DATABASE IF NOT EXISTS efa0125_08_projeto_java;
 USE efa0125_08_projeto_java;
+
 
 -- ====================================================
 -- Tabelas sem chaves estrangeiras primeiro

@@ -19,7 +19,7 @@ import persistence.UtilizadorDAO;
  */
 public class UtilizadorService {
 
-    private final UtilizadorDAO utilizadorDAO;
+    private UtilizadorDAO utilizadorDAO;
 
     /**
      * Construtor padrão.
@@ -30,7 +30,7 @@ public class UtilizadorService {
     }
 
     // =========================================================
-    // AUTENTICAÇÃO
+    // AUTENTICAR UTILIZADOR
     // =========================================================
     /**
      * Autentica um utilizador no sistema.
@@ -91,13 +91,28 @@ public class UtilizadorService {
     // =========================================================
     // LISTAR UTILIZADORES
     // =========================================================
+    /**
+     * Lista todos os utilizadores registados no sistema.
+     *
+     * @return Lista de objetos {@link Utilizador} contendo todos os utilizadores.
+     * @throws DadosInvalidosException Caso ocorra algum erro ao obter os utilizadores.
+     */
     public List<Utilizador> listarUtilizadores() throws DadosInvalidosException {
         return utilizadorDAO.listarUtilizadores();
     }
 
     // =========================================================
-    // ATRIBUIR PERMISSÃO
+    // ATRIBUIR PERMISSÃO (indicado na Listagem)
     // =========================================================
+    /**
+     * Atualiza as permissões de um utilizador específico.
+     *
+     * @param utilizadorId ID do utilizador a ser atualizado.
+     * @param perfilId ID do perfil a ser atribuído ao utilizador.
+     * @param isAdmin Indica se o utilizador terá privilégios de administrador(true) ou não (false).
+     * @throws DadosInvalidosException 
+     * Se o utilizadorId ou perfilId forem inválidos (menores ou iguais a zero), ou se ocorrer algum erro na atualização das permissões.
+     */
     public void atualizarPermissao(int utilizadorId, int perfilId, boolean isAdmin)
             throws DadosInvalidosException {
         if (utilizadorId <= 0)

@@ -2,11 +2,10 @@ package exception;
 
 /**
  * Exceção personalizada para validação de dados inválidos ou em falta.
- * <p>
+ * 
  * Lançada quando os dados fornecidos pelo utilizador não cumprem
  * os requisitos de validação da aplicação, como campos vazios,
  * nulos ou com formato incorreto.
- * </p>
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17

@@ -4,7 +4,7 @@ import exception.DadosInvalidosException;
 
 /**
  * Representa uma pessoa no sistema AccessControl.
- * <p>
+ * 
  * Classe base que encapsula os dados essenciais de uma pessoa, servindo de base
  * para outras entidades como {@link Utilizador}.
  *
@@ -45,9 +45,10 @@ public class Pessoa {
         return id;
     }
 
+
     /**
      * Define o identificador único da pessoa.
-     * <p>
+     * 
      * Método privado — o ID só pode ser atribuído pelo construtor.
      *
      * @param id ID da pessoa. Deve ser maior que zero.
@@ -95,13 +96,16 @@ public class Pessoa {
         this.nome = nome;
     }
 
+   
+
     /**
-     *
-     * @return
+     * Retorna uma representação textual de pessoa
+     * 
+     * @return Texto com os dados principais de pessoa.
      */
     @Override
     public String toString() {
-        return nome;
+        return "Pessoa{" + "nome=" + nome + '}';
     }
 
 }

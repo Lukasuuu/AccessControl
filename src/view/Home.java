@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package view;
 
 import javax.swing.JOptionPane;
@@ -10,8 +7,7 @@ import javax.swing.JOptionPane;
  * Janela principal de boas-vindas da aplicação AccessControl.
  *
  * É a primeira janela apresentada ao utilizador ao iniciar a aplicação.
- * Contém uma mensagem de apresentação e um botão que redireciona para
- * o ecrã de autenticação ({@link Login}).
+ * Contém uma mensagem de apresentação e um botão que redireciona para o ecrã de autenticação ({@link Login}).
  *
  * @author Lucas Gonçalves
  * @since 2026-03-17
@@ -52,29 +48,29 @@ public class Home extends javax.swing.JFrame {
         lbLogin1.setText("Soluções modernas para autenticação e controlo de acessos.");
 
         CmbHome.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        CmbHome.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "            -- Selecione um perfil --", "Administrador", "Utilizador" }));
+        CmbHome.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Selecione um perfil --", "Administrador", "Utilizador" }));
         CmbHome.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(CmbHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(169, 169, 169))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(97, 97, 97)
                         .addComponent(lbLogin))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(17, 17, 17)
                         .addComponent(lbLogin1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(btnBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 136, Short.MAX_VALUE)
-                .addComponent(CmbHome, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(136, 136, 136))
+                        .addGap(137, 137, 137)
+                        .addComponent(btnBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,9 +80,9 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(CmbHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(btnBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CmbHome, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addComponent(btnBemVindo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62))
         );
 
@@ -104,7 +100,7 @@ public class Home extends javax.swing.JFrame {
         
         String perfilEscolhido = (String) CmbHome.getSelectedItem();
         // Verificar se o utilizador ainda não escolheu um perfil
-        if (perfilEscolhido.equals("            -- Selecione um perfil --")) {
+        if (perfilEscolhido.equals("-- Selecione um perfil --")) {
             JOptionPane.showMessageDialog(this,
                     "Por favor seleciona um perfil antes de continuar.",
                     "Perfil não selecionado",
@@ -120,7 +116,7 @@ public class Home extends javax.swing.JFrame {
 
     /**
      * Ponto de entrada da aplicação.
-     * <p>
+     * 
      * Aplica o Look and Feel Nimbus (se disponível) e inicializa
      * a janela principal na Event Dispatch Thread do Swing.
      *

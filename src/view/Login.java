@@ -1,3 +1,4 @@
+
 package view;
 
 import exception.DadosInvalidosException;
@@ -160,11 +161,11 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Faz o login no sistema. - Lê os campos da tela - Chama o UtilizadorDAO
-     * atraves da Classe utilizadorService
+     * Faz o login no sistema. - 
+     * Lê os campos da tela - Chama o UtilizadorDAO atraves da Classe utilizadorService
      *
-     * para validar no banco - Se der certo, abre a tela principal - Se der
-     * errado, mostra mensagem e não abre o sistema
+     * Validado no banco de dados corretament - Abre a tela principal 
+     *     - Se der errado, mostra mensagem e não abre o sistema
      */
     private void fazerLogin() {
         // Ler os campos
@@ -262,8 +263,8 @@ public class Login extends javax.swing.JFrame {
     /**
      * Ponto de entrada para iniciar a aplicação pelo ecrã de login.
      *
-     * Inicializa a janela {@link Login} na Event Dispatch Thread do Swing,
-     * garantindo a segurança de threads na interface gráfica.
+     * Inicializa a janela {@link Login}
+     * Event Dispatch Thread do Swing, garantindo a segurança de threads na interface gráfica.
      *
      * @param args Argumentos da linha de comando (não utilizados).
      */

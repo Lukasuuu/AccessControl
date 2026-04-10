@@ -60,7 +60,8 @@ public class Main extends javax.swing.JFrame {
         lbImage = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jmFiles = new javax.swing.JMenu();
-        JmiRegistar = new javax.swing.JMenuItem();
+        jmiRegistar = new javax.swing.JMenuItem();
+        jmiListar = new javax.swing.JMenuItem();
         jmManual = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
 
@@ -76,14 +77,23 @@ public class Main extends javax.swing.JFrame {
         jmFiles.setText("Files");
         jmFiles.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
-        JmiRegistar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        JmiRegistar.setText("Registar");
-        JmiRegistar.addActionListener(new java.awt.event.ActionListener() {
+        jmiRegistar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jmiRegistar.setText("Registar");
+        jmiRegistar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JmiRegistarActionPerformed(evt);
+                jmiRegistarActionPerformed(evt);
             }
         });
-        jmFiles.add(JmiRegistar);
+        jmFiles.add(jmiRegistar);
+
+        jmiListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jmiListar.setText("Listar Utilizadores");
+        jmiListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiListarActionPerformed(evt);
+            }
+        });
+        jmFiles.add(jmiListar);
 
         jMenuBar.add(jmFiles);
 
@@ -126,6 +136,7 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Adiciona o comportamento de clique ao menu "Logout".
+     * 
      * Como o NetBeans criou como JMenu (não JMenuItem), usamos
      * um MouseListener para capturar o clique nele.
      */
@@ -164,23 +175,24 @@ public class Main extends javax.swing.JFrame {
 
     /**
      * Controla a visibilidade dos itens do menu Files.
-     * Admin vê "Registar"; utilizador normal não vê nada.
+     * Admin vê "Registar"; 
+     * utilizador normal não vê nada.
      *
-     * Fazemos isto com setVisible() no JmiRegistar em vez de
-     * removeAll(), para não perder a ligação criada pelo NetBeans.
+     * Fazemos isto com setVisible(isAdmin) no jmiRegistar em vez de removeAll(), para não perder a ligação criada pelo NetBeans.
      */
     private void configurarMenus() {
         boolean isAdmin = utilizadorLogado != null && utilizadorLogado.isAdmin();
 
-        // O item "Registar" só aparece para o Administrador
-        JmiRegistar.setVisible(isAdmin);
+        // O item "Registar" e "Listar" só aparece para o Administrador
+        jmiRegistar.setVisible(isAdmin);
+        jmiListar.setVisible(isAdmin);
         jmFiles.setVisible(isAdmin);
     }
     
     /**
      * Mostra o manual da aplicação. 
-     * Lê o ficheiro README e apresenta o seu conteúdo num diálogo. 
-     * Em caso de erro, mostra uma mensagem ao utilizador.
+     * Lê o ficheiro README_ADMIN.txt e README_USER.txt e apresenta o seu conteúdo num diálogo para o Administrador e o Utilizador. 
+     * Em caso de erro, mostra uma mensagem ao utilizador ou administrador.
      *
      * @param evt Evento de clique que disparou a ação.
      */
@@ -195,7 +207,7 @@ public class Main extends javax.swing.JFrame {
         }
 
         if (!manual.exists()) {
-            manual = new File("dist/" + manual.getName());
+            manual = new File("docs/" + manual.getName());
         }
 
         try {
@@ -226,16 +238,21 @@ public class Main extends javax.swing.JFrame {
      * Chamado quando o Administrador clica em Files > Registar.
      * Abre o diálogo RegistarUtilizadorDialog.
      */
-    private void JmiRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JmiRegistarActionPerformed
+    private void jmiRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiRegistarActionPerformed
         // Abre o diálogo modal de registo
         // 'this' é o Frame pai, true = modal (bloqueia o Main enquanto aberto)
         RegistarUtilizadorDialog dlg = new RegistarUtilizadorDialog(this, true);
         dlg.setVisible(true);
-    }//GEN-LAST:event_JmiRegistarActionPerformed
+    }//GEN-LAST:event_jmiRegistarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
          fazerLogout();
     }//GEN-LAST:event_formWindowClosing
+
+    private void jmiListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiListarActionPerformed
+        ListarUtilizadoresDialog dlg = new ListarUtilizadoresDialog(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_jmiListarActionPerformed
     
     // =========================================================
     // LABEL DO UTILIZADOR LOGADO
@@ -259,8 +276,8 @@ public class Main extends javax.swing.JFrame {
     }
 
     /**
-     * Define o utilizador atualmente autenticado e atualiza a interface. pode
-     * ser null para limpar a sessão.
+     * Define o utilizador atualmente autenticado e atualiza a interface. 
+     * Pode ser null para limpar a sessão.
      *
      * @param u Utilizador autenticado;
      *
@@ -284,11 +301,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem JmiRegistar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenu jmFiles;
     private javax.swing.JMenu jmManual;
+    private javax.swing.JMenuItem jmiListar;
+    private javax.swing.JMenuItem jmiRegistar;
     private javax.swing.JLabel lbImage;
     // End of variables declaration//GEN-END:variables
 }
